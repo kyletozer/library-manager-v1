@@ -1,21 +1,25 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Library Manager</title>
-  <link rel="stylesheet" href="stylesheets/style.css">
+  <title>{{title}}</title>
+  <link rel="stylesheet" href="stylesheets/main.min.css">
 </head>
 
 <body>
   <header>
     <nav>
       <ul>
-        <li><a href="all_books.html">Books</a></li>
-        <li><a href="all_patrons.html">Patrons</a></li>
-        <li><a href="all_loans.html">Loans</a></li>
+        {{#if navigation.top}}
+          {{#each navigation.top}}
+            <li><a href="{{route}}">{{label}}</a></li>
+          {{/each}}
+        {{/if}}
       </ul>
     </nav>
   </header>
 
   {{{body}}}
+
+  <script src="javascripts/main.min.js"></script>
 </body>
 </html>

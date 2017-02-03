@@ -1,6 +1,8 @@
 # files
 
 .DS_Store
+*.min.*
+*.map
 
 
 # folders

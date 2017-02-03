@@ -25,6 +25,14 @@ contents.forEach(function(file){
   db[model.name] = model;
 });
 
+Object.keys(db).forEach(function(modelName){
+  var model = db[modelName];
+
+  if(model.associate) {
+    model.associate(db);
+  }
+});
+
 
 db.connection = connection;
 module.exports = db;
