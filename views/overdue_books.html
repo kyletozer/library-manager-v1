@@ -12,7 +12,7 @@
       {{#each data}}
         {{#with dataValues.book.dataValues}}
         <tr>
-            <td><a href="book_detail.html">{{this.title}}</a></td>
+            <td><a href="/book-detail/{{this.id}}">{{this.title}}</a></td>
             <td>{{this.author}}</td>
             <td>{{this.genre}}</td>
             <td>{{this.first_published}}</td>

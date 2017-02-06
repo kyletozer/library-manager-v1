@@ -6,13 +6,18 @@ var Patron = models.patron;
 
 module.exports = {
 
+  // GET /all-books
 	getAll: function(req, res, next) {
 
 		res.view = 'all_books';
 		res.locals.pageTitle = 'Books';
 
+    var options = {
+      order: [['id', 'DESC']]
+    };
+
 		Book
-			.findAll()
+			.findAll(options)
 			.then(function(data) {
         // console.log(data);
 
@@ -24,12 +29,14 @@ module.exports = {
       });
 	},
 
+  // GET /overdue-books
   getOverdue: function(req, res, next) {
 
     res.view = 'overdue_books';
     res.locals.pageTitle = 'Overdue Books';
 
     var options = {
+      order: [['id', 'DESC']],
       include: Book,
       where: {
         returned_on: null,
@@ -42,7 +49,7 @@ module.exports = {
     Loan
       .findAll(options)
       .then(function(data){
-        console.log(data);
+        // console.log(data);
 
         res.locals.data = data;
         next();
@@ -53,12 +60,14 @@ module.exports = {
       });
   },
 
+  // GET /checked-books
   getChecked: function(req, res, next) {
 
     res.view = 'checked_books';
     res.locals.pageTitle = 'Checked Books';
 
     var options = {
+      order: [['id', 'DESC']],
       include: Book,
       where: {
         returned_on: null
@@ -79,19 +88,14 @@ module.exports = {
       });
   },
 
-  getNew: function(req, res, next) {
-    next();
-  },
-
+  // POST /new-book
   postNew: function(req, res, next) {
 
     Book
       .create(req.body)
       .then(function(data) {
-
-        console.log(data);
+        // console.log(data);
         res.redirect('/all-books');
-
       })
       .catch(function(error) {
 
@@ -106,9 +110,11 @@ module.exports = {
       });
   },
 
+  // GET /book-detail/:id
   getDetail: function(req, res, next) {
 
     var options = {
+      order: [['id', 'DESC']],
       include: Patron,
       where: {
         book_id: req.params.id
@@ -117,7 +123,6 @@ module.exports = {
 
     Loan.findAll(options)
       .then(function(data){
-
         res.locals.loans = data;
         next();
       })
@@ -126,6 +131,7 @@ module.exports = {
       });
   },
 
+  // POST /book-detail/:book-id
   postDetail: function(req, res, next) {
 
     var options = {
@@ -142,8 +148,6 @@ module.exports = {
       })
       .catch(function(error){
 
-        // console.log(error);
-
         if(error.name === 'SequelizeValidationError') {
           res.locals.submissionFail = error;
           next();
@@ -155,10 +159,7 @@ module.exports = {
       });
   },
 
-  getReturn: function(req, res, next) {
-    next();
-  },
-
+  // POST /return-book/:loan-id
   postReturn: function(req, res, next) {
 
     var options = {

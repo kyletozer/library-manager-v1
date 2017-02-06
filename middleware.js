@@ -4,6 +4,7 @@ var Patron = models.patron;
 var Loan = models.loan;
 
 
+// custom middleware function for sharing data between routes, check index.js to see what function in what order is handled by each route
 module.exports = {
 
   newBookShared: function(req, res, next) {

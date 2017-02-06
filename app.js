@@ -11,6 +11,7 @@ var sequelize = require('./models').connection;
 var routes = require('./routes');
 var db = require('./models');
 
+// handlebars for templating so I wouldn't have to convert all of the templates to jade
 var hbs = handlebars.create(require('./config/handlebars'));
 var staticAssets = express.static(path.join(__dirname, 'public'));
 
@@ -28,12 +29,14 @@ app.use(logger('dev'));
 app.engine('html', hbs.engine);
 app.set('view engine', 'html');
 
+// make database connection, sync models and start http server
 db.connection
   .authenticate()
   .then(syncModels)
   .then(startServer)
   .catch(logError);
 
+// catch 404 errors
 app.use(function(req, res, next) {
   var error = new Error();
 
@@ -49,6 +52,7 @@ app.use(function(req, res, next) {
   res.render('error', locals);
 });
 
+// catch internal server errors, will render the intended view but with an error message in place
 app.use(function(error, req, res, next) {
   console.log(error);
   res.render(res.view, {error: error});

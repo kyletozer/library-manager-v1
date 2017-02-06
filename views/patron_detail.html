@@ -15,11 +15,11 @@
     <tbody>
       {{#each loans}}
       <tr>
-          <td><a href="book_detail.html">{{this.dataValues.book.dataValues.title}}</a></td>
+          <td><a href="/book-detail/{{book_id}}">{{this.dataValues.book.dataValues.title}}</a></td>
           <td>{{this.loaned_on}}</td>
           <td>{{this.return_by}}</td>
           <td>{{this.returned_on}}</td>
-          <td><a href="/return-book" class="button">Return Book</a></td>
+          <td><a href="/return-book/{{id}}" class="button">Return Book</a></td>
       </tr>
       {{/each}}
     </tbody>

@@ -6,12 +6,14 @@ var Loan = models.loan;
 
 module.exports = {
 
+  // GET /all-loans
 	getAll: function(req, res, next) {
 
 		res.view = 'all_loans';
 		res.locals.pageTitle = 'Loans';
 
 		var options = {
+      order: [['id', 'DESC']],
 			include: [Book, Patron]
 		};
 
@@ -33,12 +35,14 @@ module.exports = {
 			});
 	},
 
+  // GET /overdue-loans
 	getOverdue: function(req, res, next) {
 
     res.view = 'overdue_loans';
     res.locals.pageTitle = 'Overdue Loans';
 
     var options = {
+      order: [['id', 'DESC']],
       include: [Book, Patron],
       where: {
         returned_on: null,
@@ -60,12 +64,14 @@ module.exports = {
       });
 	},
 
+  // GET /checked-loans
 	getChecked: function(req, res, next) {
 
     res.view = 'checked_loans';
     res.locals.pageTitle = 'Checked Out Books';
 
     var options = {
+      order: [['id', 'DESC']],
       include: [Book, Patron],
       where: {
         returned_on: null
@@ -86,11 +92,7 @@ module.exports = {
       });
 	},
 
-  getNew: function(req, res, next) {
-
-    next();
-  },
-
+  // POST /new-loan
   postNew: function(req, res, next) {
 
     Loan

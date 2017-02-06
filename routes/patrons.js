@@ -6,16 +6,20 @@ var Loan = models.loan;
 
 module.exports = {
 
+  // GET /all-patrons
   getAll: function(req, res, next) {
 
     res.view = 'all_patrons';
     res.locals.pageTitle = 'Patrons';
 
+    var options = {
+      order: [['id', 'DESC']]
+    };
+
     Patron
-			.findAll()
+			.findAll(options)
 			.then(function(data) {
         // console.log(data);
-
         res.locals.data = data;
         next();
       })
@@ -29,9 +33,11 @@ module.exports = {
       });
   },
 
+  // GET /patron-detail/:id
   getDetail: function(req, res, next) {
 
     var options = {
+      order: [['id', 'DESC']],
       include: Book,
       where: {
         patron_id: req.params.id
@@ -49,6 +55,7 @@ module.exports = {
       });
   },
 
+  // POST /patron-detail/:id
   postDetail: function(req, res, next) {
 
     var options = {
@@ -60,6 +67,7 @@ module.exports = {
     Patron
       .update(req.body, options)
       .then(function(data){
+        // console.log(data);
         res.redirect('/all-patrons');
       })
       .catch(function(error){
@@ -75,10 +83,7 @@ module.exports = {
       });
   },
 
-  getNew: function(req, res, next) {
-    next();
-  },
-
+  // POST /new-patron
   postNew: function(req, res, next) {
 
     Patron
@@ -91,6 +96,7 @@ module.exports = {
 
         if(error.name === 'SequelizeValidationError') {
           res.locals.submissionFail = error;
+          res.locals.patron = { dataValues: req.body };
           next();
 
         } else {
