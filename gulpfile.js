@@ -1,51 +1,41 @@
-var gulp = require('gulp')
-var concat = require('gulp-concat')
-var rename = require('gulp-rename')
-var maps = require('gulp-sourcemaps')
-var sass = require('gulp-sass')
-var jsmin = require('gulp-minify')
-var livereload = require('gulp-livereload')
-var clean = require('gulp-clean')
-var jshint = require('gulp-jshint')
+var gulp = require('gulp');
+var jshint = require('gulp-jshint');
+var maps = require('gulp-sourcemaps');
+var sass = require('gulp-sass');
+var rename = require('gulp-rename');
+var livereload = require('gulp-livereload');
 
-var srcFolder = './public';
-var jsFolder = srcFolder + '/javascripts';
-var cssFolder = srcFolder + '/stylesheets';
-var destFolder = srcFolder;
+var src = './public';
+var stylesPath = src + '/stylesheets';
 
-// tasks
-gulp.task('cleanScripts', cleanScripts)
-gulp.task('cleanStyles', cleanStyles)
-gulp.task('lintScripts', ['cleanScripts'], lintScripts)
-gulp.task('processScripts', ['cleanScripts', 'lintScripts'], processScripts)
-gulp.task('processStyles', ['cleanStyles'], processStyles)
-gulp.task('watch', ['processScripts', 'processStyles'], watchFiles)
-gulp.task('default', ['watch'])
 
-function processScripts() {
+var jsDirs = [
+  './*.js',
+  './models/**/*.js',
+  './public/**/*.js',
+  './routes/**/*.js'
+];
+
+
+gulp.task('lint-scripts', lintScripts);
+gulp.task('compile-sass', compileSass);
+gulp.task('watch', ['compile-sass'], watch);
+gulp.task('reload', reload);
+gulp.task('default', ['watch']);
+
+
+function lintScripts() {
 
   gulp
-    .src([
-      jsFolder + '/vendor/**/*.js',
-      jsFolder + '/**/*.js'
-    ])
-    .pipe(maps.init())
-    .pipe(concat('main.js'))
-    .pipe(jsmin({
-      ext: {
-        min: '.min.js'
-      },
-      mangle: true
-    }))
-    .pipe(maps.write('.'))
-    .pipe(gulp.dest(jsFolder))
-    .pipe(livereload())
+    .src(jsDirs)
+    .pipe(jshint())
+    .pipe(jshint.reporter('default'));
 }
 
-function processStyles() {
+function compileSass() {
 
   gulp
-    .src(cssFolder + '/main.scss')
+    .src(stylesPath + '/main.scss')
     .pipe(maps.init())
     .pipe(rename('main.min.css'))
     .pipe(sass({
@@ -53,57 +43,25 @@ function processStyles() {
     }).on('error', sass.logError))
     .pipe(maps.write('.', {
       mapFile: function(mapFilePath) {
-        return mapFilePath.replace('.min', '')
+        return mapFilePath.replace('.min', '');
       }
     }))
-    .pipe(gulp.dest(cssFolder))
-    .pipe(livereload())
+    .pipe(gulp.dest(stylesPath))
+    .pipe(livereload());
 }
 
-function cleanScripts() {
-
-	return gulp.src([
-		jsFolder + '/*.js',
-		jsFolder + '/*.map'
-	], {read: false}).pipe(clean())
-}
-
-function cleanStyles() {
-
-	return gulp.src([
-		cssFolder + '/*.*',
-		'!' + cssFolder + '/*.scss'
-	], {read: false}).pipe(clean())
-}
-
-function lintScripts() {
-
-  return gulp
-    .src([
-      jsFolder + '/**/*.js',
-      '!' + jsFolder + '/vendor/**/*.js'
-    ])
-    .pipe(jshint())
-    .pipe(jshint.reporter('default'), {
-      verbose: true
-    })
-}
-
-function watchFiles() {
-
-  livereload({
-    start: true
-  })
+function reload() {
 
   gulp
-    .watch(
-      jsFolder + '/**/*.js',
-      ['processScripts']
-    )
+    .src('.')
+    .pipe(livereload());
+}
 
-  gulp
-    .watch(
-      cssFolder + '/**/*.scss',
-      ['processStyles']
-    )
+function watch() {
+
+  livereload({ start: true });
+
+  gulp.watch(jsDirs, ['lint-scripts']);
+  gulp.watch(stylesPath + '/**/*.scss', ['compile-sass']);
+  gulp.watch('./views/**/*.html', ['reload']);
 }

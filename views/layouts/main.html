@@ -1,25 +1,29 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>{{title}}</title>
+  <title>{{pageTitle}}</title>
   <link rel="stylesheet" href="stylesheets/main.min.css">
 </head>
 
 <body>
   <header>
-    <nav>
-      <ul>
-        {{#if navigation.top}}
-          {{#each navigation.top}}
-            <li><a href="{{route}}">{{label}}</a></li>
-          {{/each}}
-        {{/if}}
-      </ul>
-    </nav>
+    {{> main_navigation}}
   </header>
 
-  {{{body}}}
+  <main>
 
-  <script src="javascripts/main.min.js"></script>
+    {{#if error}}
+
+      <h1>{{error.message}}</h1>
+
+    {{else}}
+
+      <h1>{{pageTitle}}</h1>
+
+      {{{body}}}
+
+    {{/if}}
+
+  </main>
 </body>
 </html>

@@ -1,13 +1,4 @@
-<h1>{{title}}</h1>
-
-<p>
-  <a href="new_book.html" class="button" class="button">Create New Book</a>
-</p>
-
-<p>Filters
-  {{#withSeparator navigation.bookFilter "|"}}
-  <a href="{{route}}">{{filterLabel}}</a> {{/withSeparator}}
-</p>
+{{> books_page_elements}}
 
 <table>
     <thead>
@@ -19,19 +10,15 @@
         </tr>
     </thead>
     <tbody>
-        {{#each books}}
-          <tr>
-            {{#with dataValues}}
-              <td>
-                <a href="book_detail.html">
-                  {{title}}
-                </a>
-              </td>
-              <td>{{author}}</td>
-              <td>{{genre}}</td>
-              <td>{{first_published}}</td>
-            {{/with}}
-          </tr>
-        {{/each}}
+      {{#each data}}
+        {{#with this.dataValues}}
+        <tr>
+            <td><a href="/book-detail/{{id}}">{{this.title}}</a></td>
+            <td>{{this.author}}</td>
+            <td>{{this.genre}}</td>
+            <td>{{this.first_published}}</td>
+        </tr>
+        {{/with}}
+      {{/each}}
     </tbody>
 </table>

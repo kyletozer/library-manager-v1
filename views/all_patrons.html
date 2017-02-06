@@ -1,6 +1,4 @@
-
-<h1>Patrons</h1>
-<p> <a href="new_patron.html" class="button">Create New Patron</a></p>
+<p> <a href="/new-patron" class="button">Create New Patron</a></p>
 <table>
     <thead>
         <tr>
@@ -12,19 +10,21 @@
         </tr>
     </thead>
     <tbody>
-      {{#each patrons}}
+      {{#each data}}
         {{#with dataValues}}
-          <tr>
-            <td>
-              <a href="patron_detail.html">
-                {{first_name}} {{last_name}}
-              </a>
-            </td>
-            <td>{{address}}</td>
-            <td>{{email}}</td>
-            <td>{{library_id}}</td>
-            <td>{{zip_code}}</td>
-          </tr>
+
+            <tr>
+                <td>
+                  <a href="/patron-detail/{{this.id}}">
+                    {{this.first_name}} {{this.last_name}}
+                  </a>
+                </td>
+                <td>{{this.address}}</td>
+                <td>{{this.email}}</td>
+                <td>{{this.library_id}}</td>
+                <td>{{this.zip_code}}</td>
+            </tr>
+
         {{/with}}
       {{/each}}
     </tbody>

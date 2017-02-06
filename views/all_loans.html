@@ -1,6 +1,5 @@
-<h1>Loans</h1>
-<p> <a href="new_loan.html" class="button">Create New Loan</a></p>
-<p>Filters <a href="all_loans.html">All</a> | <a href="overdue_loans.html">Overdue</a> | <a href="checked_loans.html">Checked Out</a></p>
+{{> loans_page_elements}}
+
 <table>
     <thead>
         <tr>
@@ -13,45 +12,23 @@
         </tr>
     </thead>
     <tbody>
+      {{#each data}}
+        {{#with dataValues}}
         <tr>
-            <td><a href="book_detail.html">Emma</a></td>
-            <td><a href="patron_detail.html">Dave McFarland</a></td>
-            <td>2015-12-10</td>
-            <td>2020-10-20</td>
-            <td></td>
-            <td><a href="return_book.html" class="button">Return Book</a></td>
+            <td><a href="book_detail.html">{{this.book.dataValues.title}}</a></td>
+            <td>
+              <a href="patron_detail.html">
+              {{#with this.patron.dataValues}}
+                {{this.first_name}} {{this.last_name}}
+              {{/with}}
+              </a>
+            </td>
+            <td>{{this.loaned_on}}</td>
+            <td>{{this.return_by}}</td>
+            <td>{{this.returned_on}}</td>
+            <td><a href="/return-book/{{this.id}}" class="button">Return Book</a></td>
         </tr>
-        <tr>
-            <td><a href="book_detail.html">Harry Potter and the Goblet of Fire</a></td>
-            <td><a href="patron_detail.html">Andrew Chalkley</a></td>
-            <td>2015-12-11</td>
-            <td>2015-12-18</td>
-            <td></td>
-            <td><a href="return_book.html" class="button">Return Book</a></td>
-        </tr>
-        <tr>
-            <td><a href="book_detail.html">A Brief History of Time</a></td>
-            <td><a href="patron_detail.html">Andrew Chalkley</a></td>
-            <td>2015-12-12</td>
-            <td>2015-12-19</td>
-            <td></td>
-            <td><a href="return_book.html" class="button">Return Book</a></td>
-        </tr>
-        <tr>
-            <td><a href="book_detail.html">The Universe in a Nutshell</a></td>
-            <td><a href="patron_detail.html">Alena Holligan</a></td>
-            <td>2015-12-13</td>
-            <td>2015-12-20</td>
-            <td></td>
-            <td><a href="return_book.html" class="button">Return Book</a></td>
-        </tr>
-        <tr>
-            <td><a href="book_detail.html">The Martian</a></td>
-            <td><a href="patron_detail.html">Michael Poley</a></td>
-            <td>2015-12-13</td>
-            <td>2015-12-20</td>
-            <td>2015-12-17</td>
-            <td></td>
-        </tr>
+        {{/with}}
+      {{/each}}
     </tbody>
 </table>

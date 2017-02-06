@@ -1,5 +1,8 @@
+// sequelize setup, I rewrote the entire setup from scratch to understand what was going on
+
 var fs = require('fs');
 var Sequelize = require('sequelize');
+
 var config = {
   dialect: 'sqlite',
   storage: 'library.db'
@@ -11,6 +14,7 @@ var db = {};
 
 
 contents = contents.filter(function(file){
+
   var currFileName = __filename.split('/');
   var checkOne = file.substr(file.length - 3, 3) === '.js';
   var checkTwo = file !== currFileName[currFileName.length - 1];
@@ -34,5 +38,7 @@ Object.keys(db).forEach(function(modelName){
 });
 
 
-db.connection = connection;
-module.exports = db;
+module.exports = {
+  models: db,
+  connection: connection
+};
