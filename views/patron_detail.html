@@ -19,7 +19,11 @@
           <td>{{this.loaned_on}}</td>
           <td>{{this.return_by}}</td>
           <td>{{this.returned_on}}</td>
-          <td><a href="/return-book/{{id}}" class="button">Return Book</a></td>
+          {{#unless this.returned_on}}
+          <td>
+            <a href="/return-book/{{id}}" class="button">Return Book</a>
+          </td>
+          {{/unless}}
       </tr>
       {{/each}}
     </tbody>

@@ -50,7 +50,8 @@ module.exports = {
     Loan
       .findById(req.params.id, options)
       .then(function(data){
-        // console.log(data);
+        console.log(data);
+        data.dataValues.returned_on = Loan.formatDate(new Date());
         res.locals.data = data;
         next();
       })
@@ -78,33 +79,9 @@ module.exports = {
         var currentDate = date;
         var futureDate = date + 604800000;
 
-        function formatDate(timestamp) {
-
-          var d = new Date(timestamp);
-
-          var year = d.getFullYear();
-          var month = d.getMonth() + 1;
-          var day = d.getDate();
-
-          var dateArr = [year, month, day];
-
-          dateArr = dateArr
-            .map(function(val){
-              val = val.toString();
-
-              if(val.length === 1) {
-                val = '0' + val;
-              }
-              return val;
-            })
-            .join('-');
-
-          return dateArr;
-        }
-
         res.locals.patrons = data;
-        res.locals.loaned_on = formatDate(currentDate);
-        res.locals.return_by = formatDate(futureDate);
+        res.locals.loaned_on = Loan.formatDate(currentDate);
+        res.locals.return_by = Loan.formatDate(futureDate);
 
         next();
       })

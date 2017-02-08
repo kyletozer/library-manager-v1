@@ -7,6 +7,7 @@ var handlebars = require('express-handlebars');
 var app = express();
 var port = Number(process.env.PORT || 3000);
 
+
 var sequelize = require('./models').connection;
 var routes = require('./routes');
 var db = require('./models');

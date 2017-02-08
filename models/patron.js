@@ -42,9 +42,11 @@ module.exports = function(connection, Sequelize) {
         }
       }
     }
-  }, {
+  },
+  {
     timestamps: false,
     classMethods: {
+
       associate: function(models) {
         this.hasMany(models.loan, { foreignKey: 'patron_id' });
       }

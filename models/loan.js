@@ -29,9 +29,34 @@ module.exports = function(connection, Sequelize) {
   }, {
     timestamps: false,
     classMethods: {
+
       associate: function(models) {
         this.belongsTo(models.book, { foreignKey: 'book_id' });
         this.belongsTo(models.patron, { foreignKey: 'patron_id' });
+      },
+
+      formatDate: function(timestamp) {
+
+        var d = new Date(timestamp);
+
+        var year = d.getFullYear();
+        var month = d.getMonth() + 1;
+        var day = d.getDate();
+
+        var dateArr = [year, month, day];
+
+        dateArr = dateArr
+          .map(function(val){
+            val = val.toString();
+
+            if(val.length === 1) {
+              val = '0' + val;
+            }
+            return val;
+          })
+          .join('-');
+
+        return dateArr;
       }
     }
   });
